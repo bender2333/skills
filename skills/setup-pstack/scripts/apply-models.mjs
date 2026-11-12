@@ -47,7 +47,6 @@ const ROLES = {
 // map alone does not make a panel independent; the resolved models do.
 const AGENTS = {
 	scout: "@smol",
-	librarian: "@smol",
 	reviewer: "@advisor",
 	"security-reviewer": "@judge",
 	task: "@task",
@@ -63,13 +62,18 @@ const DIVERSE_FROM = { judge: "advisor" };
 
 // Family preference per tier, best first. Matched against the model id.
 const TIERS = {
-	strong: [/opus/, /-pro\b/, /heavy/, /\bo[34]\b/, /sonnet/],
-	mid: [/sonnet/, /grok-4/, /gpt-5/, /gemini-.*flash/, /opus/],
+	strong: [/opus/, /gpt-6/, /gpt-5\.[5-9]/, /grok-4\.[67]/, /-pro\b/, /heavy/, /\bo[34]\b/, /sonnet/],
+	mid: [/sonnet/, /grok-4/, /gpt-6/, /gpt-5/, /gemini-.*flash/, /opus/],
 	small: [/haiku/, /mini/, /flash/, /smol/, /sonnet/],
 };
 
+const OMP_BIN = process.env.OMP_BIN || "omp";
+
 function omp(...args) {
-	return execFileSync("omp", args, { encoding: "utf8", maxBuffer: 64 << 20 });
+	if (/\.(mjs|cjs|js)$/i.test(OMP_BIN)) {
+		return execFileSync(process.execPath, [OMP_BIN, ...args], { encoding: "utf8", maxBuffer: 64 << 20 });
+	}
+	return execFileSync(OMP_BIN, args, { encoding: "utf8", maxBuffer: 64 << 20 });
 }
 
 // `omp config get --json` answers `{ key, value, type, description }`. A failed
@@ -156,12 +160,14 @@ function familyOf(model, tier) {
 // With `avoid`, only models outside that family qualify and no match yields null.
 function pick(models, spec, avoid = null) {
 	const candidates = [...models.values()].filter((m) => (spec.images ? m.images : true));
+	const pool = spec.pin ? candidates : candidates.filter((m) => m.thinking.length > 0);
+	const usable = pool.length ? pool : candidates;
 	for (const pattern of TIERS[spec.tier]) {
 		if (pattern === avoid) continue;
-		const family = candidates.filter((m) => pattern.test(m.id) && !(avoid && avoid.test(m.id)));
+		const family = usable.filter((m) => pattern.test(m.id) && !(avoid && avoid.test(m.id)));
 		if (family.length) return family.reduce((best, m) => (generation(m) > generation(best) ? m : best));
 	}
-	return avoid ? null : candidates[0];
+	return avoid ? null : usable[0];
 }
 
 function resolve({ budget, roleOverrides, agentOverrides }) {

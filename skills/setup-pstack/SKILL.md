@@ -130,7 +130,7 @@ can generate one with `/skill:create-formal-verification-skill`." On no, move on
 | judgment and prose, how explainer, why synthesizer, reflect judgment and divergent and synthesizer, historical session consults | `advisor`, through the `reviewer`, `comment-sicko`, and `seance` agents |
 | arena cross-judge pool, the second opinion | `judge`, through the `security-reviewer` agent |
 | feature, bug-fix, refactoring, perf-issue, hillclimb, swarm workers, arena runners, UI work | `task`, through the `task` and `poteto-agent` agents |
-| how explorer, why investigators, reflect tooling | `smol`, through the `scout` and `librarian` agents |
+| how explorer, why investigators, reflect tooling | `smol`, through `scout` |
 | mechanical arms | `tiny`, through the `sonic` agent |
 | hardest tasks, multi-phase plans, reading screenshots | `slow`, `plan`, `vision`, consumed by OMP itself; no agent pstack spawns runs on them |
 

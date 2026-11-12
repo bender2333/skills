@@ -13,11 +13,11 @@ relative paths, `agent://` and `history://` instead of cloud-agent URLs.
 |---|---|
 | Router | `poteto-mode` routes substantial work to the matching playbook. Start here. |
 | OMP adapters | `pstack-omp` maps canonical pstack roles and lifecycle protocols to OMP task agents. `orchestrate-omp` coordinates subagents on program-scale work. `setup-pstack` configures which model each role and agent runs on. |
-| Understanding | `how`, `why`, `interrogate`, `blast-radius`, `recall`, `ketchup`, `in-your-own-words`, `teach` |
+| Understanding | `how`, `why`, `interrogate`, `blast-radius`, `recall`, `ketchup`, `ketchup-video`, `in-your-own-words`, `teach` |
 | Design and exploration | `architect`, `arena`, `swarm`, `figure-it-out`, `sharpen`, `reflect` |
 | Execution | `tdd`, `correct`, `bro`, `show-me-your-work`, `benchmark-checklist`, `automate-me` |
 | Writing | `unslop`, `technical-writing`, `no-comments` |
-| Verification | `create-verification-skill`, `maintain-verification-skill`, `create-formal-verification-skill`, `maintain-formal-verification-skill` |
+| Verification | `create-verification-skill`, `maintain-verification-skill`, `create-formal-verification-skill`, `maintain-formal-verification-skill`, `statechart` |
 | Review | `fable-deslop` shrinks an oversized patch with the RepoPrompt CE context builder and its Oracle lanes |
 | Language | `typescript-best-practices` |
 | Bots | `make-bot-ui` |
@@ -40,14 +40,14 @@ workflows that call those names directly.
 Clone the repository and point OMP at its `skills/` directory:
 
 ```bash
-git clone https://github.com/dsebban/skills.git ~/dev/skills
+git clone https://github.com/bender2333/skills.git C:/codes/skills
 ```
 
 ```yaml
 # ~/.omp/agent/config.yml
 skills:
   customDirectories:
-    - ~/dev/skills/skills
+    - C:/codes/skills/skills
 ```
 
 The clone stays live, so `git pull` updates every skill at once.
@@ -56,7 +56,7 @@ Install the optional agents by copying them into OMP's user agent directory:
 
 ```bash
 mkdir -p ~/.omp/agent/agents
-cp ~/dev/skills/agents/*.md ~/.omp/agent/agents/
+cp C:/codes/skills/agents/*.md ~/.omp/agent/agents/
 ```
 
 Start a new OMP process after either change. Existing sessions keep their previous inventory.
@@ -110,12 +110,11 @@ the physical directory under any install root.
 
 ## Provenance
 
-- The catalog is adapted from Lauren Tan's [`pstack`](https://github.com/cursor/plugins/tree/main/pstack),
-  version 0.15.28 (`cursor/plugins` at `d457567`).
+- The catalog tracks Lauren Tan's [`pstack`](https://github.com/cursor/plugins/tree/main/pstack)
+  (0.15.28 -> 0.15.36) and [`backnotprop/pstack`](https://github.com/backnotprop/pstack) fixes, ported onto [`dsebban/skills`](https://github.com/dsebban/skills).
 - `orchestrate-omp` began as Eric Provencher's
   [`orchestrate`](https://github.com/provencher/codex-skills/tree/main/orchestrate) and is now OMP-native.
-- `pstack-omp`, `fable-deslop`, and the OMP integration, including `setup-pstack`'s model helper, are
-  maintained here.
+- `pstack-omp`, `fable-deslop`, and the OMP integration, including `setup-pstack`'s model helper and Windows fixes, are maintained in this fork.
 
 See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for upstream copyright notices.
 

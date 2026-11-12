@@ -64,14 +64,13 @@ after(() => rmSync(root, { recursive: true, force: true }));
 // Runs the script against a fresh stub state and returns what it did.
 function run(args, { catalog = TWO_FAMILIES, config = {}, failGet = null } = {}) {
 	const dir = join(root, `case-${n++}`);
-	const bin = join(dir, "bin");
 	const state = join(dir, "state");
-	for (const d of [bin, state]) mkdirSync(d, { recursive: true });
-	writeFileSync(join(bin, "omp"), STUB);
-	chmodSync(join(bin, "omp"), 0o755);
+	const stub = join(dir, "stub-omp.cjs");
+	mkdirSync(state, { recursive: true });
+	writeFileSync(stub, STUB);
 	writeFileSync(join(state, "catalog.json"), JSON.stringify(catalog));
 	writeFileSync(join(state, "config.json"), JSON.stringify(config));
-	const env = { ...process.env, PATH: `${bin}:${process.env.PATH}`, STUB_DIR: state };
+	const env = { ...process.env, OMP_BIN: stub, STUB_DIR: state };
 	if (failGet) env.STUB_FAIL_GET = failGet;
 	else delete env.STUB_FAIL_GET;
 	const result = spawnSync(process.execPath, [SCRIPT, ...args], { env, encoding: "utf8" });
@@ -151,5 +150,17 @@ describe("apply-models", () => {
 		const r = run(["--budget", "large"], { catalog: ONE_FAMILY });
 		assert.equal(r.status, 0, r.stderr);
 		assert.ok(r.written("modelRoles").judge);
+	});
+	test("strong tier prefers reasoning-capable models over non-thinking alternatives", () => {
+		const catalog = [
+			model("proxy", "deepseek-v4-pro", []),
+			model("copilot", "gpt-6.1-sol"),
+			model("copilot", "claude-opus-5.5"),
+		];
+		const r = run(["--budget", "unlimited"], { catalog });
+		assert.equal(r.status, 0, r.stderr);
+		const roles = r.written("modelRoles");
+		assert.equal(roles.advisor, "copilot/claude-opus-5.5:max");
+		assert.equal(roles.judge, "copilot/gpt-6.1-sol:max");
 	});
 });

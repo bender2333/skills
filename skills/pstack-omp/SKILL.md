@@ -20,7 +20,7 @@ Use these exact OMP agent names.
 | `planner` | `task` |
 | `designer` | `task` |
 | `reviewer` | `reviewer` |
-| `researcher` | `librarian` |
+| `researcher` | `scout` (or `task` with a read-only brief when web/doc tools are needed) |
 | `synthesizer` | `reviewer` |
 | `implementer` | `poteto-agent` |
 | `owner` | `poteto-agent` |
@@ -30,17 +30,14 @@ Role responsibilities live in `skill://poteto-mode`. This table only names the a
 
 The canonical OMP roster is closed:
 
-```text
 scout
 reviewer
 security-reviewer
-librarian
 task
 sonic
 poteto-agent
 comment-sicko
 seance
-```
 
 A canonically routed task item's `agent` value must be one of those bundled names. Canonical role labels and model aliases are not agent names. `task` is the default worker, so omit `agent` for it.
 

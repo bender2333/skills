@@ -27,7 +27,7 @@ Use the exact names exposed by the live `task` tool; its inventory is authoritat
 | UI/UX implementation or review | Omit `agent` for the default worker; the brief carries the design specialization | `med` or `hi` |
 | Code-quality verdict | `reviewer` | `med` or `hi` |
 | Security verdict | `security-reviewer` | `hi` |
-| External library or API research | `librarian` | `lo` or `med` |
+| External library or API research | `scout` (or omit `agent` with read-only brief when web/doc tools are needed) |
 
 When the live task schema exposes `effort`, match it to the assignment: `lo` for narrow questions, `med` for routine work, and `hi` when ambiguity or consequence justifies it. Otherwise rely on the selected agent's configured model role and do not pass an unavailable field. `/skill:setup-pstack` configures those roles.
 
