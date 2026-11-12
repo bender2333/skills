@@ -10,7 +10,7 @@ Answer the user's question about pstack, hand them a prompt they can send, and l
 
 A message that asks for work, such as "use pstack to fix this bug", is not a help question. Read the **poteto-mode** skill (`skill://poteto-mode`), do the work under it, and mention once that `/skill:poteto-mode` has to be typed again for each new task.
 
-This file maps questions to the skills that hold the answers. Those files own the details. Read the file you route to before you quote it, and trust it when it disagrees with this map. Every skill below is addressed as `skill://` followed by its directory name, which OMP resolves for you. The user types the same skill as `/skill:` followed by that name. Give the user the file's public copy too: `https://github.com/dsebban/skills/blob/main/skills/` followed by the skill's directory and `SKILL.md`, or the path of the reference or playbook inside it.
+This file maps questions to the skills that hold the answers. Those files own the details. Read the file you route to before you quote it, and trust it when it disagrees with this map. Every skill below is addressed as `skill://` followed by its directory name, which OMP resolves for you. The user types the same skill as `/skill:` followed by that name. Give the user the file's public copy too: `https://github.com/bender2333/skills/blob/main/skills/` followed by the skill's directory and `SKILL.md`, or the path of the reference or playbook inside it.
 
 ## Find out what they need
 
@@ -35,7 +35,7 @@ When the model configuration is missing and it matters, ask whether the user wan
 
 ## Get set up
 
-1. Install the skills from the `dsebban/skills` repository. The repository README has the current install command and the `skills.customDirectories` setting that lets OMP discover them. Start a new OMP process after changing the setting.
+1. Install the skills from the `bender2333/skills` repository (or upstream `dsebban/skills`). The repository README has the current install command and the `skills.customDirectories` setting that lets OMP discover them. Start a new OMP process after changing the setting.
 2. Run `/skill:setup-pstack` (`skill://setup-pstack`). It asks for a reasoning budget, maps a model to each role, and writes `modelRoles` and `task.agentModelOverrides` into `~/.omp/agent/config.yml`. Then it offers once each to generate a verification skill and a formal verification skill for the project, unless the project already has one.
 3. Start a real task with `/skill:poteto-mode`, a goal, and a check that can pass or fail.
 
@@ -63,12 +63,13 @@ The default answer is `/skill:poteto-mode`, which runs most of the others when i
 |---|---|
 | Do any non-trivial task with rigor | `/skill:poteto-mode` (`skill://poteto-mode`) |
 | Check that the agent understood their goal and the problem before it starts | `/skill:in-your-own-words` (`skill://in-your-own-words`) |
-| Aim a task higher before starting: more expert, more outcome-focused, not overspecified | `/skill:sharpen` (`skill://sharpen`) |
+| Get a prompt rewritten deeper, not bigger, before sending it: what a top professional would add, their raw material and methods, and an outside check. It returns the prompt and doesn't do the task | `/skill:sharpen` (`skill://sharpen`) |
 | Know how code works now, or where new code should live | `/skill:how` (`skill://how`) |
 | Know why code is shaped this way, or where a number came from | `/skill:why` (`skill://why`) |
 | Understand a change or subsystem, explained plainly | `/skill:teach` (`skill://teach`) |
 | Catch up on their own recent work on a topic | `/skill:recall` (`skill://recall`) |
 | Catch up on what changed in this chat since their last message, in plain words and small visuals, with every item waiting on them listed and decidable from the reply alone | `/skill:ketchup` (`skill://ketchup`) |
+| Catch up like `/skill:ketchup`, in a short subtitled video of slides, with the waiting calls as text under it | `/skill:ketchup-video` (`skill://ketchup-video`) |
 | Know what a small diff could break outside itself | `/skill:blast-radius` (`skill://blast-radius`) |
 | Settle types and module shape before code that crosses a function boundary | `/skill:architect` (`skill://architect`) |
 | Get several attempts at one brief, merged into the best one | `/skill:arena` (`skill://arena`) |
@@ -85,6 +86,7 @@ The default answer is `/skill:poteto-mode`, which runs most of the others when i
 | Bring a verification skill and its feature map back in line with the app | `/skill:maintain-verification-skill` (`skill://maintain-verification-skill`) |
 | Formally verify a race, invariant, or other property that tests rarely reach | `/skill:create-formal-verification-skill` (`skill://create-formal-verification-skill`) |
 | Bring a formal verification back in line after the code it covers changed, and learn whether a failure is drift or a bug | `/skill:maintain-formal-verification-skill` (`skill://maintain-formal-verification-skill`) |
+| Show a PM or designer what the user sees as a chart checked by a TLA+ model, with the shortest path to each state that breaks a rule | `/skill:statechart` (`skill://statechart`) |
 | Vet a performance number before reporting or acting on it | `/skill:benchmark-checklist` (`skill://benchmark-checklist`) |
 | Run a large or cross-cutting change, or one to review after stepping away | `/skill:figure-it-out` (`skill://figure-it-out`) |
 | Keep a decision log during a run, and review it afterward | `/skill:show-me-your-work` (`skill://show-me-your-work`) |
@@ -124,7 +126,7 @@ Playbooks are step lists inside `/skill:poteto-mode`, not skills, so they have n
 - "land the stack" runs Shipping.
 - "take over this branch" runs Session pickup.
 - "pause safely" runs Pause safely.
-- "full autopilot on this queue" runs Autopilot-full. "stack them, don't ship" runs Autopilot-stack.
+- "full autopilot on this queue" runs Autopilot-full. "autopilot, don't merge" runs Autopilot-stack.
 - "run the eval playbook" runs Eval.
 
 Without `/skill:poteto-mode`, a phrase such as "babysit this pr" can match a different installed skill for the same job instead. The Playbooks section of `skill://poteto-mode` lists every playbook and when it applies.
